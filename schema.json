@@ -1,0 +1,90 @@
+{"careContact" : 
+	{
+		"careContactId" : 
+		{
+		 	"code" : "['AN', 'ETA_NUM_C', 'RSA_NUM_C']",
+		 	"codeSystem" : ["", "FR_CNAMTS_PMSI"]
+		},
+		"nullified": ["", "false"],
+		"lastUpdatedTime": ["", "2015-12-31T13:32:26+02:00"],
+		"diagnoses" :
+		{
+			"diagnosis" :
+			{
+				"typeOfDiagnosis" : ["", "secondary"],
+        		"diagnosisCode" :
+        		{
+        			"code" : "ASS_DGN",
+        			"codeSystem" : ["", "icd10"]
+        		} 
+       
+			}
+
+		},
+		"procedures":
+		{
+			"procedure" : 
+            {
+            	"procedureCode" :
+            	{
+            		"code" : "CDC_ACT",
+        			"codeSystem" : ["", "ccam"]
+            	},
+            	"procedureTime":
+            	{
+            		"date" : "ENT_DAT_DEL"
+            	}
+            }
+                 
+		},
+		"admissionTime" :
+		{
+			"date" : "EXE_SOI_DTD"
+		},
+		"dischargeTime" : 
+		{
+			"date" : "EXE_SOI_DTF"
+		},
+		
+		"patient" :
+		{
+			"patientId" :
+			{
+				"code" : "NIR_ANO_17_C",
+				"codeSystem" : ""
+			},
+			"timeOfBirth":
+			{
+				"date" : "DT_NAIS"
+			},
+			"gender" : "COD_SEX"
+			
+		
+		},
+		"careUnit":
+		{
+			"presentationUnitId":
+			{
+				"code" : "ETA_NUM_C",
+				"codeSystem" : ["", "FR_CNAMTS_IDUnit"]
+			},
+			"medicalUnitId":
+			{
+				"code" : "ETA_NUM_C",
+				"codeSystem" : ["", "FR_CNAMTS_IDUnit"]
+				
+			},
+			"legalUnitId":
+			{
+				"code" : ["", "ex_supplier"],
+				"codeSystem" : ["", "ex_supplier"]
+			}
+		
+		},
+		"admissionFrom": "ENT_MOD",
+		"dischargeTo" : "SOR_MOD"
+		
+
+	}
+
+}

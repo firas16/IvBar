@@ -15,6 +15,24 @@ def convert_mois(month):
         'DEC': '12',
     }[month]
 
+#convert  ENT_MOD,  ENT_PRV to admiisionFrom and DischargeTo
+def convert_ENT_MOD(mode):
+    return {
+        0: 'foclin',
+        7: 'focf',
+        6: 'foclin',
+        8: "fhome",
+    }[mode]
+
+def convert_SOR_MOD(mode):
+    return {
+        0: 'toclin',
+        7: 'tocf',
+        6: 'toclin',
+        8: 'thome',
+        9: 'dec'
+    }[mode]
+
 ## Conversion of gender from numbers to letters
 def convert_gender(gender):
     if gender == 1:
@@ -55,6 +73,10 @@ def find_value(v, row):
         return '%s-'%(row.loc["GRG_GHM"][5])
     elif (v == "COD_SEX"):
         return convert_gender(row.loc[v])
+    elif (v == "ENT_MOD"):
+        return convert_ENT_MOD(row.loc["ENT_MOD"])
+    elif (v == "SOR_MOD"):
+        return convert_SOR_MOD(row.loc["SOR_MOD"])
     elif (v == "EXE_SOI_DTD") :
         datedebut = datetime.datetime(int(row.loc["EXE_SOI_DTD"][5:9]), int(convert_mois(row.loc["EXE_SOI_DTD"][2:5])), int(row.loc["EXE_SOI_DTD"][0:2]))
         datedebut_C = datedebut + datetime.timedelta(3)
