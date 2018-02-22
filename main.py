@@ -3,10 +3,10 @@ import numpy as np
 import datetime
 from xml.etree.ElementTree import (ElementTree, Element, SubElement, Comment)
 import json
-from .utilities import *
-#%load D:/firas/IvBar/utilities.py
+from utils.utilities import *
 
-rootPath = "D:/firas/IvBar/"
+
+rootPath = "D:/firas/IvBar/code/IvBar/"
 
 #read conf
 with open(rootPath + "appConf.json") as content_file:
@@ -33,7 +33,7 @@ version.text = '3.0.1'
 
 ## Creation of the root's subelement named "careContacts"
 careContacts = SubElement(root, 'careContacts')
-data_sejours.apply(lambda x: tree_generator(records, x, careContacts, ""), axis = 1 )
+data_sejours.apply(lambda x: tree_generator(records, x, careContacts, "", data_das, data_ccam), axis = 1 )
 
 #Save XML
 tree.write(conf["output_path"], encoding = 'UTF-8', xml_declaration = 'True')

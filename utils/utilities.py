@@ -1,9 +1,7 @@
+from xml.etree.ElementTree import (ElementTree, Element, SubElement, Comment)
 import pandas as pd
 import numpy as np
 import datetime
-from xml.etree.ElementTree import (ElementTree, Element, SubElement, Comment)
-import json
-
 #une autre façon de faire
 def convert_mois(month):
     return {
