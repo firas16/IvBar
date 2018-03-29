@@ -49,11 +49,14 @@ def add_value_toTree(column_name, element, value):
     columnSubElement = SubElement(element, column_name)
     columnSubElement.text = value
     return columnSubElement
+
 def add_element_toTree(column_name, element):
     columnSubElement = SubElement(element, column_name)
     return columnSubElement
 
-def fill_das(ligne, elementToFill):
+
+#PMSI utilities
+def fill_das_PMSI(ligne, elementToFill):
     diagnosis = Element('diagnosis')
     ## Creation of the diagnosis' subelements
     typeOfDiagnosis = SubElement(diagnosis, 'typeOfDiagnosis')
@@ -68,7 +71,7 @@ def fill_das(ligne, elementToFill):
     codeSystem.text = 'icd10'
     elementToFill.append(diagnosis)
 
-def find_value(v, row):
+def find_value_PMSI(v, row):
     if(v == ""):
         return ""
     elif (v == "['AN', 'ETA_NUM_C', 'RSA_NUM_C']"):
@@ -98,7 +101,7 @@ def find_value(v, row):
     else:
         return '%s'%(row.loc[v])
 
-def tree_generator(dict_var, row, source, dat_ent, data_das, data_ccam):
+def tree_generator_PMSI(dict_var, row, source, dat_ent, data_das, data_ccam):
     if(dat_ent == ""):
         dat_ent = '%s'%(row.loc["ENT_DAT"])
     for k, v in dict_var.items():
@@ -156,3 +159,66 @@ def tree_generator(dict_var, row, source, dat_ent, data_das, data_ccam):
             element = add_value_toTree(k, source, value)
    
     
+
+# ACE utilities
+def find_value_ACE(v, row):
+    if(v == ""):
+        return ""
+    elif (v == "DT_ACE") :
+        dateACE = datetime.datetime(int(row.loc["DT_ACE"][5:9]), int(convert_mois(row.loc["DT_ACE"][2:5])), int(row.loc["DT_ACE"][0:2]))
+        dateACE_C = dateACE + datetime.timedelta(3)
+        return ('%d-%02d-%02d'%(dateACE_C.year, dateACE_C.month, dateACE_C.day))
+    elif(v == "EXE_SPE"):
+        return '%s'%(int(float(row.loc[v])))
+    elif(type(v) == list):
+        return v[1]
+    else:
+        return '%s'%(row.loc[v])
+
+def tree_generator_ACE(dict_var, row, source):
+    for k, v in dict_var.items():
+        if isinstance(v, dict):
+            if(k == "staffTypes"):
+                if(pd.isnull(row.EXE_SPE) == False and row.EXE_SPE not in ("GO", "NC")):
+                    element = add_element_toTree(k, source)
+                    tree_generator(v, row, element)
+            else :
+                element = add_element_toTree(k, source)
+                tree_generator(v, row, element)
+        else:
+            value = find_value(v, row)
+            if(type(value) != "int"):
+                value = (value).lstrip()
+                
+            #print(value)
+            element = add_value_toTree(k, source, value)
+
+# DCIR utilities
+def find_value_DCIR(v, row):
+    if(v == ""):
+        return ""
+    elif (v == "DT_PRESTA") :
+        dateDCIR = datetime.datetime(int(row.loc["DT_PRESTA"][5:9]), int(convert_mois(row.loc["DT_PRESTA"][2:5])), int(row.loc["DT_PRESTA"][0:2]))
+        dateDCIR_C = dateDCIR + datetime.timedelta(3)
+        return ('%d-%02d-%02d'%(dateDCIR_C.year, dateDCIR_C.month, dateDCIR_C.day))
+    elif(type(v) == list):
+        return v[1]
+    else:
+        return '%s'%(row.loc[v])
+
+def tree_generator_DCIR(dict_var, row, source):
+    for k, v in dict_var.items():
+        if isinstance(v, dict):
+            if (k == "staffType1") | (k == "staffType2") :
+                element = add_element_toTree("staffType", source)
+                tree_generator(v, row, element)
+            else :
+                element = add_element_toTree(k, source)
+                tree_generator(v, row, element)
+        else:
+            value = find_value(v, row)
+            if(type(value) != "int"):
+                value = (value).lstrip()
+                
+            #print(value)
+            element = add_value_toTree(k, source, value)

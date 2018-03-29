@@ -4,7 +4,34 @@
 	"path_das" : "D:/firas/IvBar/DAS_C.csv",
 	"path_ccam" : "D:/firas/IvBar/CCAM.csv",
 	"path_schema" : "D:/firas/IvBar/schema.json",
+	
 	"output_path" : "D:/firas/IvBar/eraCareContactsAll_V2.xml",
+
+
+
+	"path_ace" : "D:/Fanny/IVBAR/ACE/data_ACE_C.csv",
+	"path_schema" : "D:/Fanny/IVBAR/ACE/schema.json",
+
+	"columns_types_ace" : {
+                            "NIR_ANO_17" : "str",
+                            "ACT_COD" : "str",
+                            "EXE_SPE" : "str",
+                            "DT_ACE" : "str",
+                            "NIR_ANO_17_C" : "str"
+                            },                
+
+	"path_dcir" : "D:/Fanny/IVBAR/DCIR/data_DCIR_C.csv",
+	"path_schema" : "D:/Fanny/IVBAR/DCIR/schema.json",
+	
+	"columns_types_dcir" : {
+                            "NIR_ANO_17" : "str",
+                            "PRS_NAT_REF" : "int",
+                            "DT_PRESTA" : "str",
+                            "NB_ACTE" : "int",
+                            "PSE_SPE_COD" : "int",
+                            "PSE_ACT_NAT" : "int",
+                            "NIR_ANO_17_C" : "str"
+                            },
 
 	"columns_types_sej" : {"AGE_ANN" : "float",
 	                     "AGE_GES" : "float",

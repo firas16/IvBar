@@ -1,0 +1,64 @@
+{"careContact" : 
+	{
+		"careContactId" : 
+		{
+		 	"code" : "careContactId",
+		 	"codeSystem" : ["", "FR_CNAMTS_DCIR"]
+		},
+		"nullified": ["", "false"],
+		"lastUpdatedTime": ["", "2015-12-31T13:32:26+02:00"],
+		"admissionTime" :
+		{
+			"date" : "DT_PRESTA"
+		},
+       "visitType":
+       {
+            "contactType" : ["", "out"],
+            "detailedContactTypes" :
+            {
+                "detailedContactType" :
+                {
+                    "code" : "PRS_NAT_REF",
+                    "codeSystem" : ["", "FR_CNAMTS_PRSNATREF"]
+                }
+             }
+        },
+		
+		"patient" :
+		{
+			"patientId" :
+			{
+				"code" : "NIR_ANO_17_C",
+				"codeSystem" :  ["", "FR_CNAMTS_IVBAR"]
+			}
+        },
+            
+		"careUnit":
+		{
+			"presentationUnitId":
+			{
+				"code" : ["", "ex_ETA_NUM"],
+				"codeSystem" : ["", "ex_ETANUM"]
+			},
+            "legalUnitId":
+			{
+				"code" : ["", "ex_ETA_NUM"],
+				"codeSystem" : ["", "ex_ETANUM"]
+			}
+		},
+            
+       "staffTypes" :
+       {
+            "staffType1" :
+            {
+                    "code" : "PSE_SPE_COD",
+                    "codeSystem" : ["", "FR_CNAMTS_PSESPECOD"]
+             },
+            "staffType2" :
+            {
+                    "code" : "PSE_ACT_NAT",
+                    "codeSystem" : ["", "FR_CNAMTS_PSEACTNAT"]
+            }
+        }
+	}
+}
