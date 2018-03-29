@@ -132,16 +132,16 @@ def tree_generator_PMSI(dict_var, row, source, dat_ent, data_das, data_ccam):
                     codeSystem.text = 'icd10'
                 if(row.NBR_DGN != 0):
                     das = data_das[(data_das.AN == row.AN) & (data_das.ETA_NUM_C == row.ETA_NUM_C) & (data_das.RSA_NUM_C == row.RSA_NUM_C)]
-                    das.apply(lambda x: tree_generator(v, x, element, dat_ent, data_das, data_ccam), axis = 1 )
+                    das.apply(lambda x: tree_generator_PMSI(v, x, element, dat_ent, data_das, data_ccam), axis = 1 )
             elif (k == "procedures"):
                 if row.NBR_ACT != 0:    
                     ccam = data_ccam[(data_ccam.AN == row.AN) & (data_ccam.ETA_NUM_C == row.ETA_NUM_C) & (data_ccam.RSA_NUM_C == row.RSA_NUM_C)]
-                    ccam.apply(lambda x: tree_generator(v, x, element, dat_ent, data_das, data_ccam), axis = 1 )
+                    ccam.apply(lambda x: tree_generator_PMSI(v, x, element, dat_ent, data_das, data_ccam), axis = 1 )
             else:
-                tree_generator(v, row, element, dat_ent, data_das, data_ccam)
+                tree_generator_PMSI(v, row, element, dat_ent, data_das, data_ccam)
             
         else:
-            value = find_value(v, row)
+            value = find_value_PMSI(v, row)
             if(type(value) != "int"):
                 value = (value).lstrip()
             if(v == "ENT_DAT_DEL"):
@@ -157,8 +157,6 @@ def tree_generator_PMSI(dict_var, row, source, dat_ent, data_das, data_ccam):
                 
             #print(value)
             element = add_value_toTree(k, source, value)
-   
-    
 
 # ACE utilities
 def find_value_ACE(v, row):
@@ -181,12 +179,12 @@ def tree_generator_ACE(dict_var, row, source):
             if(k == "staffTypes"):
                 if(pd.isnull(row.EXE_SPE) == False and row.EXE_SPE not in ("GO", "NC")):
                     element = add_element_toTree(k, source)
-                    tree_generator(v, row, element)
+                    tree_generator_ACE(v, row, element)
             else :
                 element = add_element_toTree(k, source)
-                tree_generator(v, row, element)
+                tree_generator_ACE(v, row, element)
         else:
-            value = find_value(v, row)
+            value = find_value_ACE(v, row)
             if(type(value) != "int"):
                 value = (value).lstrip()
                 
@@ -211,12 +209,12 @@ def tree_generator_DCIR(dict_var, row, source):
         if isinstance(v, dict):
             if (k == "staffType1") | (k == "staffType2") :
                 element = add_element_toTree("staffType", source)
-                tree_generator(v, row, element)
+                tree_generator_DCIR(v, row, element)
             else :
                 element = add_element_toTree(k, source)
-                tree_generator(v, row, element)
+                tree_generator_DCIR(v, row, element)
         else:
-            value = find_value(v, row)
+            value = find_value_DCIR(v, row)
             if(type(value) != "int"):
                 value = (value).lstrip()
                 

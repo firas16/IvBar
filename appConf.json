@@ -1,16 +1,15 @@
 {
 
-	"path_sejours" : "D:/firas/IvBar/SEJ_V1.csv",
-	"path_das" : "D:/firas/IvBar/DAS_C.csv",
-	"path_ccam" : "D:/firas/IvBar/CCAM.csv",
-	"path_schema" : "D:/firas/IvBar/schema.json",
+	"path_sejours" : "source/PMSI/data/data_sej_c.csv",
+	"path_das" : "source/PMSI/data/DAS_C.csv",
+	"path_ccam" : "source/PMSI/data/CCAM_C.csv",
 	
-	"output_path" : "D:/firas/IvBar/eraCareContactsAll_V2.xml",
+	
+	"output_path" : "eraCareContacts_res.xml",
 
 
 
-	"path_ace" : "D:/Fanny/IVBAR/ACE/data_ACE_C.csv",
-	"path_schema" : "D:/Fanny/IVBAR/ACE/schema.json",
+	"path_ace" : "source/ACE/data/data_ACE_C.csv",
 
 	"columns_types_ace" : {
                             "NIR_ANO_17" : "str",
@@ -20,8 +19,7 @@
                             "NIR_ANO_17_C" : "str"
                             },                
 
-	"path_dcir" : "D:/Fanny/IVBAR/DCIR/data_DCIR_C.csv",
-	"path_schema" : "D:/Fanny/IVBAR/DCIR/schema.json",
+	"path_dcir" : "source/DCIR/data/data_DCIR_C.csv",
 	
 	"columns_types_dcir" : {
                             "NIR_ANO_17" : "str",
