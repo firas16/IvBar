@@ -2,6 +2,8 @@ from xml.etree.ElementTree import (ElementTree, Element, SubElement, Comment)
 import pandas as pd
 import numpy as np
 import datetime
+
+date_shift = 0
 #une autre façon de faire
 def convert_mois(month):
     return {
@@ -86,15 +88,15 @@ def find_value_PMSI(v, row):
         return convert_SOR_MOD(row.loc["SOR_MOD"])
     elif (v == "EXE_SOI_DTD") :
         datedebut = datetime.datetime(int(row.loc["EXE_SOI_DTD"][5:9]), int(convert_mois(row.loc["EXE_SOI_DTD"][2:5])), int(row.loc["EXE_SOI_DTD"][0:2]))
-        datedebut_C = datedebut + datetime.timedelta(3)
+        datedebut_C = datedebut + datetime.timedelta(date_shift)
         return ('%d-%02d-%02d'%(datedebut_C.year, datedebut_C.month, datedebut_C.day))
     elif(v == "EXE_SOI_DTF") :
         datefin = datetime.datetime(int(row.loc["EXE_SOI_DTF"][5:9]), int(convert_mois(row.loc["EXE_SOI_DTF"][2:5])), int(row.loc["EXE_SOI_DTF"][0:2]))
-        datefin_C = datefin + datetime.timedelta(3)
+        datefin_C = datefin + datetime.timedelta(date_shift)
         return ('%d-%02d-%02d'%(datefin_C.year, datefin_C.month, datefin_C.day))
     elif(v == "DT_NAIS"):
         dateNaissance = datetime.datetime.strptime(row.loc["DT_NAIS"].lstrip(), '%Y-%m-%d')
-        dateNaissance = dateNaissance + datetime.timedelta(6)
+        dateNaissance = dateNaissance + datetime.timedelta(date_shift)
         return ('%d-%02d-%02d'%(dateNaissance.year, dateNaissance.month, dateNaissance.day))
     elif(type(v) == list):
         return v[1]
@@ -164,7 +166,7 @@ def find_value_ACE(v, row):
         return ""
     elif (v == "DT_ACE") :
         dateACE = datetime.datetime(int(row.loc["DT_ACE"][5:9]), int(convert_mois(row.loc["DT_ACE"][2:5])), int(row.loc["DT_ACE"][0:2]))
-        dateACE_C = dateACE + datetime.timedelta(3)
+        dateACE_C = dateACE + datetime.timedelta(date_shift)
         return ('%d-%02d-%02d'%(dateACE_C.year, dateACE_C.month, dateACE_C.day))
     elif(v == "EXE_SPE"):
         return '%s'%(int(float(row.loc[v])))
