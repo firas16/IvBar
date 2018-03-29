@@ -21,44 +21,56 @@ with open(rootPath + "source/" + source + "/schema.json") as content_file:
     content = content_file.read()
 records = json.loads(content)
 
-#Build XML
 tree = ElementTree()
 root = Element('eraCareContacts', attrib = {'xmlns' : 'urn:era:carecontacts:3'})
-tree._setroot(root)
 
 ## Creation of the root's subelement named "version"
 version = SubElement(root, 'version')
 version.text = '3.0.1'
 
-max_xml_size = 200000
+max_xml_size = 5
 
 ## Creation of the root's subelement named "careContacts"
 careContacts = SubElement(root, 'careContacts')
+
 if(source == "DCIR"):
 	data_dcir = pd.read_table(conf["path_dcir"], sep = ';', dtype = conf["columns_types_dcir"])
 	data_dcir["careContactId"] = pd.Series(np.arange(len(data_dcir.index)))
-	for i in Range(0, size+1):
+	size_df = len(data_dcir.index) // max_xml_size
+	for i in range(0, size_df+1):
+        #Build XML
+		tree = ElementTree()
+		root = Element('eraCareContacts', attrib = {'xmlns' : 'urn:era:carecontacts:3'})
+		tree._setroot(root)
 		begin = i*max_xml_size
-		end = Min((i+1)*max_xml_size, len(data_dcir))
+		end = min((i+1)*max_xml_size, len(data_dcir))
 		data_dcir[begin:end].apply(lambda x: tree_generator_DCIR(records, x, careContacts), axis = 1)
-		tree.write(conf["output_path"]+i, encoding = 'UTF-8', xml_declaration = 'True')
+		result_path =  str(i) + "_" + conf["output_path"]
+		tree.write(result_path, encoding = 'UTF-8', xml_declaration = 'True')
 elif (source == "PMSI"):
-	data_sejours = pd.read_table(conf["path_sejours"], sep = ';', dtype = conf["columns_types_sej"]).head(5)
+	data_sejours = pd.read_table(conf["path_sejours"], sep = ';', dtype = conf["columns_types_sej"]).head(50)
 	data_das = pd.read_table(conf["path_das"], sep = ';')
 	data_ccam = pd.read_table(conf["path_ccam"], sep = ';')
-	for i in Range(0, size+1):
-		begin = i*max_xml_size
-		end = Min((i+1)*max_xml_size, len(data_dcir))
+	size_df = len(data_sejours.index) // max_xml_size
+	for i in range(0, size_df+1):
+		tree = ElementTree()
+		root = Element('eraCareContacts', attrib = {'xmlns' : 'urn:era:carecontacts:3'})
+		tree._setroot(root)
+		begin = i * max_xml_size
+		end = min((i+1)*max_xml_size, len(data_dcir))
+		result_path =  str(i) + "_" + conf["output_path"]
 		data_sejours[begin:end].apply(lambda x: tree_generator_PMSI(records, x, careContacts, "", data_das, data_ccam), axis = 1 )
-		tree.write(conf["output_path"]+i, encoding = 'UTF-8', xml_declaration = 'True')
+		tree.write(result_path, encoding = 'UTF-8', xml_declaration = 'True')
 elif (source == "ACE"):
 	data_ace = pd.read_table(conf["path_ace"], sep = ';', dtype = conf["columns_types_ace"])
 	data_ace["careContactId"] = pd.Series(np.arange(len(data_ace.index)))
-	for i in Range(0, size+1):
-		begin = i*max_xml_size
-		end = Min((i+1)*max_xml_size, len(data_dcir))
+	size_df = len(data_sejours.index) // max_xml_size
+	for i in range(0, size_df+1):
+		tree = ElementTree()
+		root = Element('eraCareContacts', attrib = {'xmlns' : 'urn:era:carecontacts:3'})
+		tree._setroot(root)
+		begin = i * max_xml_size
+		end = min((i+1)*max_xml_size, len(data_dcir))
 		data_ace[begin:end].apply(lambda x: tree_generator_ACE(records, x, careContacts), axis = 1 )
-		tree.write(conf["output_path"]+i, encoding = 'UTF-8', xml_declaration = 'True')
-
-#Save XML
-#tree.write(conf["output_path"], encoding = 'UTF-8', xml_declaration = 'True')
+		result_path =  str(i) + "_" + conf["output_path"]
+		tree.write(result_path, encoding = 'UTF-8', xml_declaration = 'True')
