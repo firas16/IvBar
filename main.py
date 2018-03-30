@@ -7,7 +7,7 @@ from utils.utilities import *
 
 
 rootPath = "D:/firas/IvBar/code/new/IvBar/"
-source = "PMSI" #source is a config parameter that should be equal to DCIR, ACE or DCIR
+source = "ACE" #source is a config parameter that should be equal to DCIR, ACE or PMSI
 
 #read conf
 with open(rootPath + "appConf.json") as content_file:
@@ -27,11 +27,9 @@ root = Element('eraCareContacts', attrib = {'xmlns' : 'urn:era:carecontacts:3'})
 ## Creation of the root's subelement named "version"
 version = SubElement(root, 'version')
 version.text = '3.0.1'
+    
+max_xml_size = 200000
 
-max_xml_size = 5
-
-## Creation of the root's subelement named "careContacts"
-careContacts = SubElement(root, 'careContacts')
 
 if(source == "DCIR"):
 	data_dcir = pd.read_table(conf["path_dcir"], sep = ';', dtype = conf["columns_types_dcir"])
@@ -42,13 +40,15 @@ if(source == "DCIR"):
 		tree = ElementTree()
 		root = Element('eraCareContacts', attrib = {'xmlns' : 'urn:era:carecontacts:3'})
 		tree._setroot(root)
+		## Creation of the root's subelement named "careContacts"
+		careContacts = SubElement(root, 'careContacts')
 		begin = i*max_xml_size
 		end = min((i+1)*max_xml_size, len(data_dcir))
 		data_dcir[begin:end].apply(lambda x: tree_generator_DCIR(records, x, careContacts), axis = 1)
 		result_path =  str(i) + "_" + conf["output_path"]
 		tree.write(result_path, encoding = 'UTF-8', xml_declaration = 'True')
 elif (source == "PMSI"):
-	data_sejours = pd.read_table(conf["path_sejours"], sep = ';', dtype = conf["columns_types_sej"]).head(50)
+	data_sejours = pd.read_table(conf["path_sejours"], sep = ';', dtype = conf["columns_types_sej"])
 	data_das = pd.read_table(conf["path_das"], sep = ';')
 	data_ccam = pd.read_table(conf["path_ccam"], sep = ';')
 	size_df = len(data_sejours.index) // max_xml_size
@@ -56,6 +56,8 @@ elif (source == "PMSI"):
 		tree = ElementTree()
 		root = Element('eraCareContacts', attrib = {'xmlns' : 'urn:era:carecontacts:3'})
 		tree._setroot(root)
+		## Creation of the root's subelement named "careContacts"
+		careContacts = SubElement(root, 'careContacts')
 		begin = i * max_xml_size
 		end = min((i+1)*max_xml_size, len(data_dcir))
 		result_path =  str(i) + "_" + conf["output_path"]
@@ -69,6 +71,8 @@ elif (source == "ACE"):
 		tree = ElementTree()
 		root = Element('eraCareContacts', attrib = {'xmlns' : 'urn:era:carecontacts:3'})
 		tree._setroot(root)
+		## Creation of the root's subelement named "careContacts"
+		careContacts = SubElement(root, 'careContacts')
 		begin = i * max_xml_size
 		end = min((i+1)*max_xml_size, len(data_dcir))
 		data_ace[begin:end].apply(lambda x: tree_generator_ACE(records, x, careContacts), axis = 1 )

@@ -28,7 +28,7 @@
 		{
 			"patientId" :
 			{
-				"code" : "NIR_ANO_17_C",
+				"code" : "NUM_ENQ",
 				"codeSystem" :  ["", "FR_CNAMTS_IVBAR"]
 			}
         },
