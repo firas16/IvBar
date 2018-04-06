@@ -1,15 +1,17 @@
 {
 
-	"path_sejours" : "source/PMSI/data/data_sej_c.csv",
-	"path_das" : "source/PMSI/data/DAS_C.csv",
-	"path_ccam" : "source/PMSI/data/CCAM_C.csv",
+
+	"path_sejours" : "D:/Mehdi/sej.csv",
+	"path_das" : "D:/Mehdi/das.csv",
+	"path_ccam" : "D:/Mehdi/ccam.csv",
 	
 	
-	"output_path" : "eraCareContacts_res.xml",
+	"output_path" : "eraCareContacts_ace.xml",
 
 
 
-	"path_ace" : "source/ACE/data/data_ACE_C.csv",
+	
+	"path_ace" : "D:/Mehdi/input/ace_presta.csv",
 
 	"columns_types_ace" : {
                             "NIR_ANO_17" : "str",
@@ -48,7 +50,7 @@
 	                     "ENT_DAT" : "str",
 	                     "ENT_MOD" : "int",
 	                     "ENT_PRV" : "float",
-	                     "ETA_NUM" : "int",
+	                     "ETA_NUM" : "str",
 	                     "EXB_NBJ" : "int",
 	                     "EXE_SOI_DTD" : "str",
 	                     "EXE_SOI_DTF" : "str",
@@ -69,7 +71,7 @@
 	                     "NIR_ANO_17" : "str",
 	                     "NIR_ANO_MAM" : "str",
 	                     "PAS_LIT_DED" : "int",
-	                     "RSA_NUM" : "int",
+	                     "RSA_NUM" : "str",
 	                     "RSS_NUM" : "int",
 	                     "SEJ_COD_CONF" : "float",
 	                     "SEJ_NBJ" : "int",

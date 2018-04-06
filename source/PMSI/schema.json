@@ -2,7 +2,7 @@
 	{
 		"careContactId" : 
 		{
-		 	"code" : "['AN', 'ETA_NUM_C', 'RSA_NUM_C']",
+		 	"code" : "['AN', 'ETA_NUM', 'RSA_NUM']",
 		 	"codeSystem" : ["", "FR_CNAMTS_PMSI"]
 		},
 		"nullified": ["", "false"],
@@ -50,7 +50,7 @@
 		{
 			"patientId" :
 			{
-				"code" : "NIR_ANO_17_C",
+				"code" : "NUM_ENQ",
 				"codeSystem" : ""
 			},
 			"timeOfBirth":
@@ -65,12 +65,12 @@
 		{
 			"presentationUnitId":
 			{
-				"code" : "ETA_NUM_C",
+				"code" : "ETA_NUM",
 				"codeSystem" : ["", "FR_CNAMTS_IDUnit"]
 			},
 			"medicalUnitId":
 			{
-				"code" : "ETA_NUM_C",
+				"code" : "ETA_NUM",
 				"codeSystem" : ["", "FR_CNAMTS_IDUnit"]
 				
 			},
