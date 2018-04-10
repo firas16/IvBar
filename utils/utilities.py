@@ -73,43 +73,53 @@ def fill_das_PMSI(ligne, elementToFill):
     codeSystem.text = 'icd10'
     elementToFill.append(diagnosis)
 
+
 def find_value_PMSI(v, row):
-    if(v == ""):
+    if (v == ""):
         return ""
     elif (v == "['AN', 'ETA_NUM', 'RSA_NUM']"):
-        return ('%s-%s-%s'%(row.loc["AN"], row.loc["ETA_NUM"], row.loc["RSA_NUM"]))
+        return "-".join([str(row.name[0]), row.name[1], str(row.name[2])])
     elif (v == "GRG_GHM[5]"):
-        return '%s-'%(row.loc["GRG_GHM"][5])
+        return '%s-' % (row.loc["GRG_GHM"][5])
     elif (v == "COD_SEX"):
         return convert_gender(row.loc[v])
     elif (v == "ENT_MOD"):
         return convert_ENT_MOD(row.loc["ENT_MOD"])
     elif (v == "SOR_MOD"):
         return convert_SOR_MOD(row.loc["SOR_MOD"])
-    elif (v == "EXE_SOI_DTD") :
-        datedebut = datetime.datetime(int(row.loc["EXE_SOI_DTD"][5:9]), int(convert_mois(row.loc["EXE_SOI_DTD"][2:5])), int(row.loc["EXE_SOI_DTD"][0:2]))
-        datedebut_C = datedebut + datetime.timedelta(date_shift)
-        return ('%d-%02d-%02d'%(datedebut_C.year, datedebut_C.month, datedebut_C.day))
-    elif(v == "EXE_SOI_DTF") :
-        datefin = datetime.datetime(int(row.loc["EXE_SOI_DTF"][5:9]), int(convert_mois(row.loc["EXE_SOI_DTF"][2:5])), int(row.loc["EXE_SOI_DTF"][0:2]))
-        datefin_C = datefin + datetime.timedelta(date_shift)
-        return ('%d-%02d-%02d'%(datefin_C.year, datefin_C.month, datefin_C.day))
-    elif(v == "DT_NAIS"):
+    elif (v == "EXE_SOI_DTD"):
+        datedebut = datetime.datetime(int(row.loc["EXE_SOI_DTD"][5:9]), int(convert_mois(row.loc["EXE_SOI_DTD"][2:5])),
+                                      int(row.loc["EXE_SOI_DTD"][0:2]))
+        datedebut_C = datedebut + datetime.timedelta(3)
+        return ('%d-%02d-%02d' % (datedebut_C.year, datedebut_C.month, datedebut_C.day))
+    elif (v == "EXE_SOI_DTF"):
+        datefin = datetime.datetime(int(row.loc["EXE_SOI_DTF"][5:9]), int(convert_mois(row.loc["EXE_SOI_DTF"][2:5])),
+                                    int(row.loc["EXE_SOI_DTF"][0:2]))
+        datefin_C = datefin + datetime.timedelta(3)
+        return ('%d-%02d-%02d' % (datefin_C.year, datefin_C.month, datefin_C.day))
+    elif (v == "DT_NAIS"):
         dateNaissance = datetime.datetime.strptime(row.loc["DT_NAIS"].lstrip(), '%Y-%m-%d')
-        dateNaissance = dateNaissance + datetime.timedelta(date_shift)
-        return ('%d-%02d-%02d'%(dateNaissance.year, dateNaissance.month, dateNaissance.day))
-    elif(type(v) == list):
+        dateNaissance = dateNaissance + datetime.timedelta(6)
+        return ('%d-%02d-%02d' % (dateNaissance.year, dateNaissance.month, dateNaissance.day))
+    elif (type(v) == list):
         return v[1]
+    elif (v == "ETA_NUM"):
+        return row.name[1]
+    elif (v == "RSA_NUM"):
+        return row.name[2]
+    elif (v == "AN"):
+        return row.name[0]
     else:
-        return '%s'%(row.loc[v])
+        return '%s' % (row.loc[v])
+
 
 def tree_generator_PMSI(dict_var, row, source, dat_ent, data_das, data_ccam):
-    if(dat_ent == ""):
-        dat_ent = '%s'%(row.loc["ENT_DAT"])
+    if (dat_ent == ""):
+        dat_ent = '%s' % (row.loc["ENT_DAT"])
     for k, v in dict_var.items():
         if isinstance(v, dict):
             element = add_element_toTree(k, source)
-            if(k == "diagnoses"):
+            if (k == "diagnoses"):
                 diagnosis = SubElement(element, 'diagnosis')
                 ## Creation of the diagnosis' subelements
                 typeOfDiagnosis = SubElement(diagnosis, 'typeOfDiagnosis')
@@ -117,11 +127,11 @@ def tree_generator_PMSI(dict_var, row, source, dat_ent, data_das, data_ccam):
                 diagnosisCode = SubElement(diagnosis, 'diagnosisCode')
                 ## Creation of the diagnosisCode's subelements
                 code = SubElement(diagnosisCode, 'code')
-                code.text = '%s'%(row.DGN_PAL)
+                code.text = '%s' % (row.DGN_PAL)
                 codeSystem = SubElement(diagnosisCode, 'codeSystem')
                 codeSystem.text = 'icd10'
-                #add_element_toTree(diagnosis, element)
-                if(pd.isnull(row.DGN_REL) == False):
+                # add_element_toTree(diagnosis, element)
+                if (pd.isnull(row.DGN_REL) == False):
                     diagnosis = SubElement(element, 'diagnosis')
                     ## Creation of the diagnosis' subelements
                     typeOfDiagnosis = SubElement(diagnosis, 'typeOfDiagnosis')
@@ -129,35 +139,41 @@ def tree_generator_PMSI(dict_var, row, source, dat_ent, data_das, data_ccam):
                     diagnosisCode = SubElement(diagnosis, 'diagnosisCode')
                     ## Creation of the diagnosisCode's subelements
                     code = SubElement(diagnosisCode, 'code')
-                    code.text = '%s'%(row.DGN_REL)
+                    code.text = '%s' % (row.DGN_REL)
                     codeSystem = SubElement(diagnosisCode, 'codeSystem')
                     codeSystem.text = 'icd10'
-                if(row.NBR_DGN != 0):
-                    das = data_das[(data_das.AN == row.AN) & (data_das.ETA_NUM == row.ETA_NUM) & (data_das.RSA_NUM == row.RSA_NUM)]
-                    das.apply(lambda x: tree_generator_PMSI(v, x, element, dat_ent, data_das, data_ccam), axis = 1 )
+                if (row.NBR_DGN != 0):
+
+                    indexRow = (row.name[0], str(row.name[1]), row.name[2])
+
+                    das = data_das.loc[indexRow]
+                    das.apply(lambda x: tree_generator_PMSI(v, x, element, dat_ent, data_das, data_ccam), axis=1)
             elif (k == "procedures"):
-                if row.NBR_ACT != 0:    
-                    ccam = data_ccam[(data_ccam.AN == row.AN) & (data_ccam.ETA_NUM == row.ETA_NUM) & (data_ccam.RSA_NUM == row.RSA_NUM)]
-                    ccam.apply(lambda x: tree_generator_PMSI(v, x, element, dat_ent, data_das, data_ccam), axis = 1 )
+                if row.NBR_ACT != 0:
+
+                    indexRow = (row.name[0], str(row.name[1]), row.name[2])
+
+                    ccam = data_ccam.loc[indexRow]
+                    ccam.apply(lambda x: tree_generator_PMSI(v, x, element, dat_ent, data_das, data_ccam), axis=1)
             else:
                 tree_generator_PMSI(v, row, element, dat_ent, data_das, data_ccam)
-            
+
         else:
             value = find_value_PMSI(v, row)
-            if(type(value) != "int"):
+            if (type(value) != "int"):
                 value = (value).lstrip()
-            if(v == "ENT_DAT_DEL"):
-                if(len(dat_ent) == 7):
+            if (v == "ENT_DAT_DEL"):
+                if (len(dat_ent) == 7):
                     dat_ent = "0" + dat_ent
                 datetime_object = datetime.datetime.strptime(dat_ent, '%d%m%Y')
-                if(value != "nan"):
+                if (value != "nan"):
                     value = int(float(value))
                 else:
                     value = 0
-                date = datetime_object + datetime.timedelta(value + date_shift)
-                value = ('%d-%02d-%02d'%(date.year, date.month, date.day))
-                
-            #print(value)
+                date = datetime_object + datetime.timedelta(value + 3)
+                value = ('%d-%02d-%02d' % (date.year, date.month, date.day))
+
+            # print(value)
             element = add_value_toTree(k, source, value)
 
 # ACE utilities

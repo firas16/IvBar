@@ -5,8 +5,9 @@ from xml.etree.ElementTree import (ElementTree, Element, SubElement, Comment)
 import json
 from utils.utilities import *
 import time
+from natsort import natsorted
 
-source = "ACE"  # source is a config parameter that should be equal to DCIR, ACE or PMSI
+source = "PMSI"  # source is a config parameter that should be equal to DCIR, ACE or PMSI
 
 # read conf
 with open("appConf.json") as content_file:
@@ -38,17 +39,22 @@ if (source == "DCIR"):
         tree = ElementTree()
         root = Element('eraCareContacts', attrib={'xmlns': 'urn:era:carecontacts:3'})
         tree._setroot(root)
+        version = SubElement(root, 'version')
+        version.text = '3.0.1'
         ## Creation of the root's subelement named "careContacts"
         careContacts = SubElement(root, 'careContacts')
         begin = i * max_xml_size
         end = min((i + 1) * max_xml_size, len(data_dcir))
         data_dcir[begin:end].apply(lambda x: tree_generator_DCIR(records, x, careContacts), axis=1)
-        result_path = str(i) + "_" + conf["output_path"]
+        result_path = "D:/Mehdi/Carecontact/" + source + "/" + "era_care_contact_3_0_fr-cnamts_" + source + str(
+            i) + "_p14n.xml"
         tree.write(result_path, encoding='UTF-8', xml_declaration='True')
 elif (source == "PMSI"):
     print("PMSI transformation")
-    data_sejours = pd.read_table(conf["path_sejours"], sep=';', dtype=conf["columns_types_sej"])
-
+    cols = ['AN', 'ETA_NUM', 'RSA_NUM', 'DGN_PAL', 'DGN_REL', 'NBR_DGN', 'NBR_ACT', 'EXE_SOI_DTD', 'EXE_SOI_DTF',
+            'NUM_ENQ', 'DT_NAIS', 'COD_SEX', 'ENT_MOD', 'SOR_MOD', 'ENT_DAT']
+    data_sejours = pd.read_table(conf["path_sejours"], sep=';', usecols = cols, low_memory=False)
+    print("number of occurences: ", len(data_sejours))
     #clean data
     data_sejours = data_sejours.loc[data_sejours["DT_NAIS"] != ".-01-01"]
 
@@ -60,19 +66,25 @@ elif (source == "PMSI"):
     data_das.set_index(['AN', 'ETA_NUM', 'RSA_NUM'], inplace=True)
     data_ccam.set_index(['AN', 'ETA_NUM', 'RSA_NUM'], inplace=True)
 
+    # data_sejours = data_sejours.reindex(natsorted(data_sejours.index))
+    # data_das = data_das.reindex(natsorted(data_das.index))
+    # data_ccam = data_ccam.reindex(natsorted(data_ccam.index))
+
+
     size_df = len(data_sejours.index) // max_xml_size
     for i in range(0, size_df + 1):
         print("File ", i)
         tree = ElementTree()
         root = Element('eraCareContacts', attrib={'xmlns': 'urn:era:carecontacts:3'})
         tree._setroot(root)
+        version = SubElement(root, 'version')
+        version.text = '3.0.1'
         ## Creation of the root's subelement named "careContacts"
         careContacts = SubElement(root, 'careContacts')
         begin = i * max_xml_size
         end = min((i + 1) * max_xml_size, len(data_sejours))
-        result_path = str(i) + "_" + conf["output_path"]
-        data_sejours[begin:end].apply(lambda x: tree_generator_PMSI(records, x, careContacts, "", data_das, data_ccam),
-                                      axis=1)
+        result_path = "D:/Mehdi/Carecontact/" + source + "/" + "era_care_contact_3_0_fr-cnamts_" + source + str(i) + "_p14n.xml"
+        data_sejours[begin:end].apply(lambda x: tree_generator_PMSI(records, x, careContacts, "", data_das, data_ccam), axis=1)
         tree.write(result_path, encoding='UTF-8', xml_declaration='True')
 elif (source == "ACE"):
     data_ace = pd.read_table(conf["path_ace"], sep=';', dtype=conf["columns_types_ace"])
@@ -94,7 +106,7 @@ elif (source == "ACE"):
         begin = i * max_xml_size
         end = min((i + 1) * max_xml_size, len(data_ace))
         data_ace[begin:end].apply(lambda x: tree_generator_ACE(records, x, careContacts), axis=1)
-        result_path = "target/ACE/" + str(i) + "_" + conf["output_path"]
+        result_path = "D:/Mehdi/Carecontact/"+ source + "/" + "era_care_contact_3_0_fr-cnamts_" + source + str(i) +"_p14n.xml"
         tree.write(result_path, encoding='UTF-8', xml_declaration='True')
 
 elapsed_time = time.time() - start_time
