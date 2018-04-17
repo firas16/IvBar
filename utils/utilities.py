@@ -149,10 +149,8 @@ def tree_generator_PMSI(dict_var, row, source, dat_ent, data_das, data_ccam):
                     das = data_das.loc[indexRow]
                     das.apply(lambda x: tree_generator_PMSI(v, x, element, dat_ent, data_das, data_ccam), axis=1)
             elif (k == "procedures"):
-                if row.NBR_ACT != 0:
-
-                    indexRow = (row.name[0], str(row.name[1]), row.name[2])
-
+                indexRow = (row.name[0], str(row.name[1]), row.name[2])
+                if(indexRow in data_ccam.index):
                     ccam = data_ccam.loc[indexRow]
                     ccam.apply(lambda x: tree_generator_PMSI(v, x, element, dat_ent, data_das, data_ccam), axis=1)
             else:

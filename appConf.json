@@ -21,16 +21,15 @@
                             "NIR_ANO_17_C" : "str"
                             },                
 
-	"path_dcir" : "source/DCIR/data/data_DCIR_C.csv",
+	"path_dcir" : "D:/Mehdi/dcir_presta.csv",
 	
 	"columns_types_dcir" : {
-                            "NIR_ANO_17" : "str",
                             "PRS_NAT_REF" : "int",
                             "DT_PRESTA" : "str",
                             "NB_ACTE" : "int",
                             "PSE_SPE_COD" : "int",
                             "PSE_ACT_NAT" : "int",
-                            "NIR_ANO_17_C" : "str"
+                            "NUM_ENQ" : "str"
                             },
 
 	"columns_types_sej" : {"AGE_ANN" : "float",
