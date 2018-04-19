@@ -51,7 +51,7 @@
 			"patientId" :
 			{
 				"code" : "NUM_ENQ",
-				"codeSystem" : ""
+				"codeSystem" :  ["", "FR_CNAMTS_IVBAR"]
 			},
 			"timeOfBirth":
 			{
