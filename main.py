@@ -6,7 +6,7 @@ import json
 from utils.utilities import *
 import time
 
-source = "DCIR"  # source is a config parameter that should be equal to DCIR, ACE or PMSI
+source = "ACE"  # source is a config parameter that should be equal to DCIR, ACE or PMSI
 
 # read conf
 with open("appConf.json") as content_file:
@@ -108,12 +108,13 @@ elif (source == "PMSI"):
         tree.write(result_path, encoding='UTF-8', xml_declaration='True')
 elif (source == "ACE"):
     data_ace = pd.read_table(conf["path_ace"], sep=';', dtype=conf["columns_types_ace"])
+    data_ace["careContactId"] = pd.Series(np.arange(len(data_ace.index)))
+
     # delete row where date DT_ACE is missing
     data_ace = data_ace.drop(data_ace.index[9578888])
-
     data_ace = data_ace[pd.to_numeric(data_ace.EXE_SPE, errors='coerce').notnull()]
-    data_ace["careContactId"] = pd.Series(np.arange(len(data_ace.index)))
     size_df = len(data_ace.index) // max_xml_size
+
     for i in range(0, size_df + 1):
         print("File ", i)
         tree = ElementTree()
@@ -126,7 +127,7 @@ elif (source == "ACE"):
         begin = i * max_xml_size
         end = min((i + 1) * max_xml_size, len(data_ace))
         data_ace[begin:end].apply(lambda x: tree_generator_ACE(records, x, careContacts), axis=1)
-        result_path = "D:/Mehdi/Carecontact/"+ source + "/" + "era_care_contact_3_0_fr-cnamts_" + source + str(i) +"_p14n.xml"
+        result_path = "D:/Mehdi/Carecontact/"+ source + "/2/" + "era_care_contact_3_0_fr-cnamts_" + source + str(i) +"_p14n.xml"
         tree.write(result_path, encoding='UTF-8', xml_declaration='True')
 
 elapsed_time = time.time() - start_time
