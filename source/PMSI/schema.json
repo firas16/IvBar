@@ -41,6 +41,10 @@
 		{
 			"date" : "EXE_SOI_DTD"
 		},
+		"visitType" :
+        {
+            "contactType" : ["", "inp"]
+        },
 		"dischargeTime" : 
 		{
 			"date" : "EXE_SOI_DTF"
@@ -57,9 +61,20 @@
 			{
 				"date" : "DT_NAIS"
 			},
-			"gender" : "COD_SEX"
-			
-		
+			"gender" : "COD_SEX",
+          "homeLocation" :
+          {
+                  "localAreaId" :
+                  {
+                          "code" : "BDI_COD",
+                          "codeSystem" : ["", "FR_CNAMTS_GEO"]
+                   }
+           },
+            "other" :
+            {
+                "insurance" : "TOP_RG1"
+            }
+          
 		},
 		"careUnit":
 		{

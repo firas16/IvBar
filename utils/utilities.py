@@ -172,7 +172,16 @@ def tree_generator_PMSI(dict_var, row, source, dat_ent, data_das, data_ccam):
                 value = ('%d-%02d-%02d' % (date.year, date.month, date.day))
 
             # print(value)
-            element = add_value_toTree(k, source, value)
+            if (k == "insurance"):
+                ColumnSubElement = SubElement(source, k, attrib={'xmlns': 'urn:era:carecontacts:3:cnamts'})
+                ColumnSubElement.text = value
+                element = ColumnSubElement
+            elif (value == "prado"):
+                ColumnSubElement = SubElement(source, k, attrib={'xmlns': 'urn:era:carecontacts:3:cnamts'})
+                ColumnSubElement.text = value
+                element = ColumnSubElement
+            else:
+                element = add_value_toTree(k, source, value)
 
 # ACE utilities
 def find_value_ACE(v, row):

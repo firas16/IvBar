@@ -30,7 +30,24 @@
 			{
 				"code" : "NUM_ENQ",
 				"codeSystem" :  ["", "FR_CNAMTS_IVBAR"]
-			}
+			},
+			"timeOfBirth":
+			{
+				"date" : "DT_NAIS"
+			},
+			"gender" : "COD_SEX",
+          	"homeLocation" :
+			{
+				"localAreaId" :
+				{
+					"code" : "BDI_COD",
+					"codeSystem" : ["", "FR_CNAMTS_GEO"]
+				}
+			   },
+            	"other" :
+            	{
+                	"insurance" : "TOP_RG1"
+            	}
         },
             
 		"careUnit":

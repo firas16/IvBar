@@ -6,7 +6,7 @@ import json
 from utils.utilities import *
 import time
 
-source = "ACE"  # source is a config parameter that should be equal to DCIR, ACE or PMSI
+source = "PMSI"  # source is a config parameter that should be equal to DCIR, ACE or PMSI
 
 # read conf
 with open("appConf.json") as content_file:
@@ -52,7 +52,7 @@ if (source == "DCIR"):
 elif (source == "PMSI"):
     print("PMSI transformation")
     cols = ['AN', 'ETA_NUM', 'RSA_NUM', 'DGN_PAL', 'DGN_REL', 'NBR_DGN', 'NBR_ACT', 'EXE_SOI_DTD', 'EXE_SOI_DTF',
-            'NUM_ENQ', 'DT_NAIS', 'COD_SEX', 'ENT_MOD', 'SOR_MOD', 'ENT_DAT']
+            'NUM_ENQ', 'DT_NAIS', 'COD_SEX', 'ENT_MOD', 'SOR_MOD', 'ENT_DAT', 'TOP_RG1', 'BDI_COD']
     data_sejours = pd.read_table(conf["path_sejours"], sep=';', usecols = cols, low_memory=False)
     print("number of occurences: ", len(data_sejours))
 
@@ -66,15 +66,10 @@ elif (source == "PMSI"):
     print("length ccam : ", len(data_ccam))
     print(data_ccam.dtypes)
 
-    data_ccam = data_ccam[(data_ccam["ACV_ACT"] != 4) & ((data_ccam["PHA_ACT"] == 0) | (data_ccam["PHA_ACT"] == 1))]
     # Filter incorrect code acts and das
-    print("new length ccam : ", len(data_ccam))
-    # Join tables
-    # data_sejour_with_das = pd.merge(data_sejours, data_das, how='left', left_on=['AN', 'ETA_NUM', 'RSA_NUM'],
-    #                                 right_on=['AN', 'ETA_NUM', 'RSA_NUM'])
-    # data_sejour_with_das_with_ccam = pd.merge(data_sejour_with_das, data_ccam, how='left',
-    #                                 left_on=['AN', 'ETA_NUM', 'RSA_NUM'], right_on=['AN', 'ETA_NUM', 'RSA_NUM'])
+    data_ccam = data_ccam[(data_ccam["ACV_ACT"] != 4) & ((data_ccam["PHA_ACT"] == 0) | (data_ccam["PHA_ACT"] == 1))]
 
+    print("new length ccam : ", len(data_ccam))
 
     #add indexes
     data_sejours.set_index(['AN', 'ETA_NUM', 'RSA_NUM'], inplace=True)
@@ -84,10 +79,6 @@ elif (source == "PMSI"):
     data_sejours.sort_index(inplace=True)
     data_das.sort_index(inplace=True)
     data_ccam.sort_index(inplace=True)
-    # data_sejours = data_sejours.reindex(natsorted(data_sejours.index))
-    # data_das = data_das.reindex(natsorted(data_das.index))
-    # data_ccam = data_ccam.reindex(natsorted(data_ccam.index))
-
 
     size_df = len(data_sejours.index) // max_xml_size
     for i in range(0, size_df + 1):
@@ -101,7 +92,7 @@ elif (source == "PMSI"):
         careContacts = SubElement(root, 'careContacts')
         begin = i * max_xml_size
         end = min((i + 1) * max_xml_size, len(data_sejours))
-        result_path = "D:/Mehdi/Carecontact/" + source + "2/" + "era_care_contact_3_0_fr-cnamts_" + source + str(i) + "_p14n.xml"
+        result_path = "D:/Mehdi/Carecontact/" + source + "3/" + "era_care_contact_3_0_fr-cnamts_" + source + str(i) + "_p14n.xml"
         #data_sejours.groupBy(['AN', 'ETA_NUM', 'RSA_NUM'])['']
 
         data_sejours[begin:end].apply(lambda x: tree_generator_PMSI(records, x, careContacts, "", data_das, data_ccam), axis=1)
